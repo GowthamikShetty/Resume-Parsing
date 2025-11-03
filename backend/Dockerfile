@@ -1,21 +1,21 @@
-# Use a lightweight Python base image
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Set working directory inside container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY backend/requirements.txt .
+# Copy your requirements and install them
+COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Download spaCy English model
+# Install spaCy model (via pip for Render)
 RUN pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz
 
-# Copy the rest of your code
-COPY . .
+# Copy your FastAPI app code
+COPY app ./app
 
-# Expose Render's expected port
+# Expose the port Render will use
 EXPOSE 10000
 
-# Run FastAPI app directly (no start.sh)
+# Start the app
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
