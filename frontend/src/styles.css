@@ -1,0 +1,12 @@
+
+
+
+/* Minimal base styles */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f9f9f9;
+  color: #222;
+}
+
+/* Add more custom styles below */

@@ -1,0 +1,28 @@
+# Node
+node_modules/
+frontend/node_modules/
+
+# Python virtual envs
+.venv/
+backend/.venv/
+venv/
+
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VSCode
+.vscode/
+
+# Environment files
+.env
+
+# Build outputs
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
