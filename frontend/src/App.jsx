@@ -14,7 +14,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch("https://resume-parser-62d6.onrender.com//upload", {
+    const response = await fetch("https://resume-parser-62d6.onrender.com/upload", {
       method: "POST",
       body: formData,
     });
