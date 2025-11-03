@@ -1,14 +1,21 @@
-FROM python:3.11-slim
+# Use a lightweight Python base image
+FROM python:3.10-slim
 
+# Set working directory inside container
 WORKDIR /app
-COPY ./app /app/app
-COPY requirements.txt /app/requirements.txt
 
-RUN pip install --upgrade pip
-RUN pip install -r /app/requirements.txt
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# (if you didn't use the wheel in requirements) ensure model installed:
+# Download spaCy English model
 RUN python -m spacy download en_core_web_sm
 
-EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy the rest of your code
+COPY . .
+
+# Expose Render's expected port
+EXPOSE 10000
+
+# Run FastAPI app directly (no start.sh)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
