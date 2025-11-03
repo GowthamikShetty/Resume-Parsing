@@ -2,33 +2,50 @@ import { useState } from "react";
 
 function App() {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState("");
+  const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file");
+    if (!file) {
+      alert("Please select a PDF file first.");
+      return;
+    }
 
+    setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch("https://resume-parser-62d6.onrender.com/upload", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("https://resume-parser-62d6.onrender.com/upload", {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await response.json();
-    setResult(data.content || "No text extracted");
+      if (!response.ok) throw new Error("Upload failed");
+      const data = await response.json();
+      setText(data.content || "No text extracted");
+    } catch (error) {
+      console.error("Error:", error);
+      setText("Error connecting to backend.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Resume Parser</h2>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
-      <pre>{result}</pre>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h1>Resume Parser</h1>
+      <input type="file" accept="application/pdf" onChange={handleFileChange} />
+      <button onClick={handleUpload} style={{ marginLeft: "10px" }}>
+        Upload
+      </button>
+      <div style={{ marginTop: "20px" }}>
+        {loading ? <p>Extracting text...</p> : <pre>{text}</pre>}
+      </div>
     </div>
   );
 }
