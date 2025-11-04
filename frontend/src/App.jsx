@@ -35,12 +35,31 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h1>Resume Parser</h1>
-      <input type="file" accept="application/pdf" onChange={handleFileChange} />
-      <button onClick={handleUpload} style={{ marginLeft: "10px" }}>
+
+      {/* ✅ File input with proper label */}
+      <label htmlFor="resumeUpload" style={{ display: "block", marginBottom: "8px" }}>
+        Upload your Resume (PDF)
+      </label>
+      <input
+        id="resumeUpload"
+        type="file"
+        accept="application/pdf"
+        onChange={handleFileChange}
+        title="Choose PDF file"
+        aria-label="Choose a resume file to upload"
+      />
+
+      {/* ✅ Accessible button */}
+      <button
+        onClick={handleUpload}
+        style={{ marginLeft: "10px" }}
+        aria-label="Upload and extract resume text"
+      >
         {loading ? "Uploading..." : "Upload"}
       </button>
+
       <div style={{ marginTop: "20px" }}>
         {loading ? <p>Extracting text...</p> : <pre>{text}</pre>}
       </div>
