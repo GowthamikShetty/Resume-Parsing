@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const API_URL = "./api";
+const API_URL = "/api";
 
 export default function FileUploader() {
   const [file, setFile] = useState(null);
