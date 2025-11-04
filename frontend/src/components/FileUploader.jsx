@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
-const API_URL = import.meta.env.VITE_API_URL;
-
+ 
 export default function FileUploader() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -19,7 +17,7 @@ export default function FileUploader() {
     formData.append("file", file);
 
     try {
-      const res = await fetch(`${API_URL}/upload`, {
+      const res = await fetch(`https://resume-parser-62d6.onrender.com/upload`, {
         method: "POST",
         body: formData
       });

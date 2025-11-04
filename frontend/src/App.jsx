@@ -18,7 +18,7 @@ function App() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+      const response = await fetch(`https://resume-parser-62d6.onrender.com/upload`, {
         method: "POST",
         body: formData,
       });
