@@ -1,12 +1,18 @@
-
-
-
-/* Minimal base styles */
 body {
+  background: #f9fafb;
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f9f9f9;
-  color: #222;
+  padding: 0;
 }
 
-/* Add more custom styles below */
+button {
+  background-color: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}

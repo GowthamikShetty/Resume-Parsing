@@ -5,9 +5,7 @@ function App() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const handleFileChange = (e) => setFile(e.target.files[0]);
 
   const handleUpload = async () => {
     if (!file) {
@@ -20,7 +18,7 @@ function App() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("https://resume-parser-62d6.onrender.com/upload", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -37,11 +35,11 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif" }}>
       <h1>Resume Parser</h1>
       <input type="file" accept="application/pdf" onChange={handleFileChange} />
       <button onClick={handleUpload} style={{ marginLeft: "10px" }}>
-        Upload
+        {loading ? "Uploading..." : "Upload"}
       </button>
       <div style={{ marginTop: "20px" }}>
         {loading ? <p>Extracting text...</p> : <pre>{text}</pre>}

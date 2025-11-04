@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const API_URL = "/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function FileUploader() {
   const [file, setFile] = useState(null);
@@ -23,6 +23,7 @@ export default function FileUploader() {
         method: "POST",
         body: formData
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || JSON.stringify(data));
       setResult(data.content || data);
@@ -55,10 +56,19 @@ export default function FileUploader() {
           className="block"
         />
         <div className="flex gap-2">
-          <button disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded" type="submit">
+          <button
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded"
+            type="submit"
+          >
             {loading ? "Parsing..." : "Upload & Parse"}
           </button>
-          <button type="button" onClick={downloadJSON} className="px-4 py-2 bg-green-600 text-white rounded" disabled={!result}>
+          <button
+            type="button"
+            onClick={downloadJSON}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+            disabled={!result}
+          >
             Download JSON
           </button>
         </div>
@@ -84,22 +94,34 @@ export default function FileUploader() {
           <div className="p-4 border rounded">
             <h3 className="font-semibold">Skills</h3>
             <div className="flex gap-2 flex-wrap">
-              {result.skills?.length ? result.skills.map(s => <span key={s} className="px-2 py-1 bg-slate-100 rounded">{s}</span>) : "—"}
+              {result.skills?.length
+                ? result.skills.map((s) => (
+                    <span
+                      key={s}
+                      className="px-2 py-1 bg-slate-100 rounded"
+                    >
+                      {s}
+                    </span>
+                  ))
+                : "—"}
             </div>
           </div>
 
           <div className="p-4 border rounded">
             <h3 className="font-semibold">Education</h3>
             <ul className="list-disc ml-6">
-              {result.education?.length ? result.education.map((e,i) => <li key={i}>{e}</li>) : <li>—</li>}
+              {result.education?.length
+                ? result.education.map((e, i) => <li key={i}>{e}</li>)
+                : <li>—</li>}
             </ul>
           </div>
 
           <div className="p-4 border rounded">
             <h3 className="font-semibold">Experience</h3>
-            {result.experience?.length ? result.experience.map((ex, i) => <p key={i} className="mb-2">{ex}</p>) : <div>—</div>}
+            {result.experience?.length
+              ? result.experience.map((ex, i) => <p key={i} className="mb-2">{ex}</p>)
+              : <div>—</div>}
           </div>
-
         </div>
       )}
     </div>
