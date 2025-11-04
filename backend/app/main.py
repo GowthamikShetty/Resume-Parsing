@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
 import uvicorn
 import tempfile
 from app.nlp import parse_resume
@@ -53,13 +52,7 @@ async def upload_resume(file: UploadFile = File(...)):
         return JSONResponse(content={"success": True, "parsed": parsed})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-@app.middleware("http")
-async def add_security_headers(request, call_next):
-    response = await call_next(request)
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["Cache-Control"] = "no-store"
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    return response
+
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
