@@ -11,7 +11,7 @@ app = FastAPI(title="Resume Parser API")
 # Allow frontend origin (adjust in deployment)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://resume-parsing-bprti79bg-gowthami-k-shettys-projects.vercel.app/"],
+    allow_origins=["https://resume-parsing-bprti79bg-gowthami-k-shettys-projects.vercel.app"],
   # change to your frontend URL (e.g., https://your-site.vercel.app) in production
     allow_credentials=True,
     allow_methods=["*"],
