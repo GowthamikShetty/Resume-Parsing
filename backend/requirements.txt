@@ -7,3 +7,6 @@ python-multipart
 docx2txt
 pydantic
 pdfplumber
+pytesseract
+Pillow
+pdf2image

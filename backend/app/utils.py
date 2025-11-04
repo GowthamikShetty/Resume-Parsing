@@ -1,48 +1,63 @@
 import PyPDF2
 import docx2txt
 import pdfplumber
+import pytesseract
+from pdf2image import convert_from_path
+from PIL import Image
+import os
 
 def extract_text_from_file(path):
-    text = ""
-
+    """
+    Extracts text from PDF, DOCX, or TXT files.
+    Uses PyPDF2 → pdfplumber → OCR (Tesseract) for image PDFs.
+    """
+    # ---------- PDF HANDLING ----------
     if path.lower().endswith(".pdf"):
-        # Try PyPDF2 first
+        text = ""
+
+        # 1️⃣ Try PyPDF2
         try:
             with open(path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
                 for page in reader.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text
+                    text += page.extract_text() or ""
         except Exception as e:
-            print("PyPDF2 error:", e)
+            print(f"[PyPDF2 Error] {e}")
 
-        # If PyPDF2 fails or returns nothing, try pdfplumber
+        # 2️⃣ Try pdfplumber if PyPDF2 fails or returns empty
         if not text.strip():
             try:
                 with pdfplumber.open(path) as pdf:
                     for page in pdf.pages:
-                        page_text = page.extract_text()
-                        if page_text:
-                            text += page_text
+                        text += page.extract_text() or ""
             except Exception as e:
-                print("pdfplumber error:", e)
+                print(f"[pdfplumber Error] {e}")
 
-        # Still empty → likely scanned PDF
+        # 3️⃣ Fallback: OCR (Tesseract) if still no text
         if not text.strip():
-            text = "No text extracted (PDF may be scanned or image-based)."
+            print("[INFO] No extractable text found — using OCR fallback...")
+            try:
+                images = convert_from_path(path)
+                for img in images:
+                    text += pytesseract.image_to_string(img)
+            except Exception as e:
+                print(f"[OCR Error] {e}")
 
+        return text.strip() or "NO_TEXT_EXTRACTED"
+
+    # ---------- DOCX HANDLING ----------
     elif path.lower().endswith(".docx"):
         try:
-            text = docx2txt.process(path) or ""
+            return docx2txt.process(path) or ""
         except Exception as e:
-            print("DOCX extraction failed:", e)
+            print(f"[DOCX Error] {e}")
+            return ""
 
+    # ---------- TXT HANDLING ----------
     else:
         try:
             with open(path, "r", errors="ignore") as f:
-                text = f.read()
+                return f.read()
         except Exception as e:
-            print("Plain text read failed:", e)
-
-    return text
+            print(f"[TXT Error] {e}")
+            return ""

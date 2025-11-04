@@ -21,6 +21,9 @@ COPY . .
 # 5. Copy FastAPI app
 COPY backend/app ./app
 
+# Install Tesseract OCR and Poppler utils
+RUN apt-get update && apt-get install -y tesseract-ocr poppler-utils
+
 # Expose Render's expected port
 EXPOSE 10000
 
